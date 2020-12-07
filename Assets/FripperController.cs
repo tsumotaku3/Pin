@@ -25,39 +25,44 @@ public class FripperController : MonoBehaviour
     void Update()
     {
         //左矢印キーを押した時左フリッパーを動かす
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && tag == "LeftFripperTag")
+        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && tag == "LeftFripperTag")
         {
             SetAngle(this.flickAngle);
         }
         //右矢印キーを押した時右フリッパーを動かす
-        if (Input.GetKeyDown(KeyCode.RightArrow) && tag == "RightFripperTag")
+        if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && tag == "RightFripperTag")
         {
             SetAngle(this.flickAngle);
         }
         //下矢印キーを押した時右フリッパーを動かす
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
             SetAngle(this.flickAngle);
         }
-        //矢印キー離された時フリッパーを元に戻す
-        if (Input.GetKeyUp(KeyCode.LeftArrow) && tag == "LeftFripperTag")
+        //矢印キーが離された時フリッパーを元に戻す
+        if ((Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) && tag == "LeftFripperTag")
         {
             SetAngle(this.defaultAngle);
         }
-        if (Input.GetKeyUp(KeyCode.RightArrow) && tag == "RightFripperTag")
+        if ((Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D)) && tag == "RightFripperTag")
         {
             SetAngle(this.defaultAngle);
         }
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
         {
             SetAngle(this.defaultAngle);
         }
+        //画面がタッチされていた時にフリッパーを動かす
         if (Input.touchCount > 0)
         {
+            //タッチした指の情報をmyTouchに代入
             Touch[] myTouch = Input.touches;
+            //タッチしたそれぞれの指で実行する
             for (int i=0;i<myTouch.Length;i++)
             {
-                Ray ray = Camera.main.ScreenPointToRay(myTouch[i].position); 
+                //タッチした指の座標をワールド座標に変換する
+                Ray ray = Camera.main.ScreenPointToRay(myTouch[i].position);
+                //変換した座標をもとに、左をタップしたら左のフリッパーを右をタップしたら右のフリッパーを動かす
                 if (myTouch[i].phase == TouchPhase.Began)
                 {
                   if (ray.origin.x < 0 && tag == "LeftFripperTag")
