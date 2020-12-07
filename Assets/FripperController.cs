@@ -11,7 +11,6 @@ public class FripperController : MonoBehaviour
     private float defaultAngle = 20;
     //弾いた時の傾き
     private float flickAngle = -20;
-
     // Use this for initialization
     void Start()
     {
@@ -25,7 +24,6 @@ public class FripperController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //左矢印キーを押した時左フリッパーを動かす
         if (Input.GetKeyDown(KeyCode.LeftArrow) && tag == "LeftFripperTag")
         {
@@ -36,7 +34,11 @@ public class FripperController : MonoBehaviour
         {
             SetAngle(this.flickAngle);
         }
-
+        //下矢印キーを押した時右フリッパーを動かす
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            SetAngle(this.flickAngle);
+        }
         //矢印キー離された時フリッパーを元に戻す
         if (Input.GetKeyUp(KeyCode.LeftArrow) && tag == "LeftFripperTag")
         {
@@ -45,6 +47,40 @@ public class FripperController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.RightArrow) && tag == "RightFripperTag")
         {
             SetAngle(this.defaultAngle);
+        }
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            SetAngle(this.defaultAngle);
+        }
+        if (Input.touchCount > 0)
+        {
+            Touch[] myTouch = Input.touches;
+            for (int i=0;i<myTouch.Length;i++)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(myTouch[i].position); 
+                if (myTouch[i].phase == TouchPhase.Began)
+                {
+                  if (ray.origin.x < 0 && tag == "LeftFripperTag")
+                  {
+                      SetAngle(this.flickAngle);
+                  }
+                  else if(ray.origin.x >=0 && tag == "RightFripperTag")
+                  {
+                      SetAngle(this.flickAngle);
+                  }  
+                }
+                if (myTouch[i].phase == TouchPhase.Ended)
+                {
+                    if (ray.origin.x < 0 && tag == "LeftFripperTag")
+                    {
+                        SetAngle(this.defaultAngle);
+                    }
+                    else if (ray.origin.x >= 0 && tag == "RightFripperTag")
+                    {
+                        SetAngle(this.defaultAngle);
+                    }
+                }
+            }
         }
     }
 
